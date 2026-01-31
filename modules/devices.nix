@@ -118,7 +118,7 @@ in
         (mkIf (cfg.som == "orin-nx" || cfg.som == "orin-nano") {
           targetBoard =
             let
-              defaultConf = mkDefault "jetson-orin-nano-devkit${lib.optionalString cfg.super "-super"}";
+              defaultConf = mkDefault "novacarrier";
               xavierConf =
                 if cfg.majorVersion == "5" then
                   mkDefault "p3509-a02+p3767-0000"

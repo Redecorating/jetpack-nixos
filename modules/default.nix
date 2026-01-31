@@ -92,6 +92,7 @@ in
         type = types.enum [
           "generic"
           "devkit"
+          "novacarrier"
 
           # Use this, if you would like to use Orin NX SOM with the original Xavier NX Devkit module (p3509-a02),
           "xavierNxDevkit"

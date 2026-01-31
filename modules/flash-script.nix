@@ -9,6 +9,12 @@ let
     types;
 
   cfg = config.hardware.nvidia-jetpack;
+  novacarrier-assets = pkgs.fetchFromGitHub {
+    owner = "MonashNovaRover";
+    repo = "novacarrier-assets";
+    rev = "3576101ddc254cebbf5ce06a3d6f4fbc72d8fbfe";
+    hash = "sha256-41/LFjLIuYniRdDJ5RXfbOSIqWClzQ38o/a6mxK9C2Q=";
+  };
 in
 {
   imports = with lib; [
@@ -287,7 +293,17 @@ in
 
         postPatch = mkOption {
           type = types.lines;
-          default = "";
+          default = ''
+# Add required files
+echo "Copying required files..."
+cp ${novacarrier-assets}/flash/novacarrier.conf novacarrier.conf
+cp ${novacarrier-assets}/flash/tegra234-mb1-bct-padvoltage-p3767-dp-a03.dtsi bootloader/generic/BCT/tegra234-mb1-bct-padvoltage-p3767-dp-a03.dtsi
+cp ${novacarrier-assets}/flash/tegra234-mb1-bct-pinmux-p3767-dp-a03.dtsi bootloader/generic/BCT/tegra234-mb1-bct-pinmux-p3767-dp-a03.dtsi
+cp ${novacarrier-assets}/flash/tegra234-mb1-bct-gpio-p3767-dp-a03.dtsi bootloader/tegra234-mb1-bct-gpio-p3767-dp-a03.dtsi
+
+echo "Setting carrier board EEPROM read size to 0..."
+sed -i 's|cvb_eeprom_read_size = <0x100>;|cvb_eeprom_read_size = <0x0>;|' bootloader/generic/BCT/tegra234-mb2-bct-misc-p3767-0000.dts            
+            '';
           description = "Additional commands to run when building flash-tools";
         };
 

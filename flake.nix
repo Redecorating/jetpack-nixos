@@ -57,8 +57,10 @@
         { som = "orin-nx"; carrierBoard = "devkit"; }
         { som = "orin-nx"; carrierBoard = "xavierNxDevkit"; }
         { som = "orin-nano"; carrierBoard = "devkit"; }
+        { som = "orin-nano"; carrierBoard = "novacarrier"; }
         { som = "orin-nx"; carrierBoard = "devkit"; super = true; }
         { som = "orin-nano"; carrierBoard = "devkit"; super = true; }
+        { som = "orin-nano"; carrierBoard = "novacarrier"; super = true; }
         { som = "orin-agx"; carrierBoard = "devkit"; majorVersion = "5"; }
         { som = "orin-agx-industrial"; carrierBoard = "devkit"; majorVersion = "5"; }
         { som = "orin-nx"; carrierBoard = "devkit"; majorVersion = "5"; }

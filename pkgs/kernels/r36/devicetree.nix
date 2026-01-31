@@ -6,9 +6,16 @@
 , runCommand
 , stdenv
 , buildPackages
+, fetchFromGitHub
 , ...
 }:
 let
+  novacarrier-assets = fetchFromGitHub {
+    owner = "MonashNovaRover";
+    repo = "novacarrier-assets";
+    rev = "3576101ddc254cebbf5ce06a3d6f4fbc72d8fbfe";
+    hash = "sha256-41/LFjLIuYniRdDJ5RXfbOSIqWClzQ38o/a6mxK9C2Q=";
+  };
   l4t-devicetree-sources = runCommand "l4t-devicetree-sources" { }
     (lib.strings.concatStrings
       ([ "mkdir -p $out ; cp ${bspSrc}/source/Makefile $out/Makefile ;" ] ++
@@ -20,7 +27,16 @@ let
               mkdir -p "$out/${project}"
               cp --no-preserve=all -vr "${lib.attrsets.attrByPath [project] 0 gitRepos}"/. "$out/${project}"
             ''
-          )));
+          )++[
+          ''
+			# dummy sudo function
+			sudo () { $@; }
+			source ${novacarrier-assets}/flash/libsetup.sh
+			# Edit device tree
+			export COMMON_DTSI=$out/hardware/nvidia/t23x/nv-public/nv-platform/tegra234-p3768-0000+p3767-xxxx-nv-common.dtsi
+			edit_nvidia_dts $COMMON_DTSI
+			cp ${novacarrier-assets}/flash/tegra234-novacarrier.dtsi $out/hardware/nvidia/t23x/nv-public/tegra234-p3768-0000.dtsi
+          '']));
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "l4t-devicetree";
